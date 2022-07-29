@@ -2,7 +2,7 @@ from behave import *
 import cv2
 import os
 import sys
-from cv2 import imread
+import json
 
 fpath = os.path.join(os.path.dirname(__file__), 'image_compare')
 sys.path.append(fpath)
@@ -20,15 +20,37 @@ def step_impl(context, testPrefix):
     context.testPrefix = testPrefix
 
 @when('Sequência de comandos "{cmdSequence}"')
-def step_impl(context, cmdSequence):
+def sequence_cmd(context, cmdSequence):
     for cmd in cmdSequence.split(','):
         print('Rodando comando: ' + cmd)
     input("Execute o comando:\n")
 
+@when('Digita "{title}"')
+def step_impl(context, title):
+    moveforward = []
+    movebackward = []
+    for c in title:
+        numLetter = ord(c) - 97
+        print('letter: ' + c + str(numLetter))
+        for i in range(0, numLetter % 6):
+            moveforward.append("right")
+            movebackward.append("left")
+        for i in range(0,int(numLetter / 6)):
+            moveforward.append("down")
+            movebackward.append("up")
+
+        if len(moveforward):
+            sequence_cmd(context, ','.join(moveforward))
+        sequence_cmd(context, "enter")
+        if len(movebackward):
+            sequence_cmd(context, ','.join(movebackward))
+        movebackward.clear()
+        moveforward.clear()
+
 @when('Executa comando "{cmd}"')
 def step_impl(context, cmd):
     print('Rodando comando: ' + cmd)
-    input("Execute o comando:\n")
+    #input("Execute o comando:\n")
 
 @when('Captura imagem')
 def step_impl(context):
@@ -49,10 +71,37 @@ def step_impl(context):
         cv2.imwrite(filename,img) #save image
     
     if os.environ['TEST_MODE'] == "validate":
+        imgBase = cv2.imread(filename)
+        error = findMatch(img, imgBase)
         print("salvar diferença entre imagens")
+        addUpdateField(filename, error)
     
     if os.environ['TEST_MODE'] == "run":
-        imgBase = imread(filename)
+        imgBase = cv2.imread(filename)
         error = findMatch(img, imgBase)
         print("assert diferença entre imagens " + str(error))
-        assert error < 10000
+        assert error < 3*getField(filename)
+
+def getField(field):
+    try:
+        # Read file first
+        with open('test_data.json') as json_file:
+            data = json.load(json_file)
+            print(data)
+            return data[field]
+    except IOError:
+        return ""
+
+def addUpdateField(field, value):
+    data = {}
+    try:
+        # Read file first
+        with open('test_data.json') as json_file:
+            data = json.load(json_file)
+            print(data)
+    except IOError as e:
+        pass        
+    data[field] = value
+    # Write directly from dictionary
+    with open('test_data.json', 'w') as outfile:
+        json.dump(data, outfile)

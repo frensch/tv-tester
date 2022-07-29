@@ -1,0 +1,2 @@
+export TEST_MODE=validate
+behave

@@ -182,7 +182,7 @@ def findMatch(img1, img2):
     sum = 0
     total = len(matches)
     for num in range(0, total):
-        print('matches: ' + str(matches[num].distance))
+        #print('matches: ' + str(matches[num].distance))
         sum += matches[num].distance
     if total > 0:
         sum /= total
