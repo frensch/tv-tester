@@ -5,6 +5,7 @@ import sys
 import json
 import broadlink
 import time
+
 os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = "rtsp_transport;0"
 
 fpath = os.path.join(os.path.dirname(__file__), 'image_compare')
@@ -12,10 +13,12 @@ sys.path.append(fpath)
 
 from image_compare.compare_images import findMatch
 
-cam = cv2.VideoCapture("rtsp://admin:brewedattheeagle1@192.168.0.40:554/onvif1", cv2.CAP_FFMPEG)
+if os.environ["TV_TESTER_CAMERA"].isnumeric():
+    cam = cv2.VideoCapture(int(os.environ["TV_TESTER_CAMERA"]))
+else:
+    cam = cv2.VideoCapture(os.environ["TV_TESTER_CAMERA"], cv2.CAP_FFMPEG)
 
-device = broadlink.hello("192.168.0.173")
-#device = broadlink.hello("10.0.0.140")
+device = broadlink.hello(os.environ['TV_TESTER_IR_REMOTE'])
 device.auth()
 
 def getFieldRemoteControl(field):

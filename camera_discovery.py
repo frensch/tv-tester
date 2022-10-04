@@ -2,9 +2,9 @@ import cv2
 import os
 os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = "rtsp_transport;0"
 
-cap = cv2.VideoCapture("rtsp://admin:brewedattheeagle1@192.168.0.44:554/onvif1", cv2.CAP_FFMPEG)
-#tive q tentar varias vezes, funcionou na rede frensch_3
-# tiver q habilitar o rtsp no app da yoosee e a senha também
+cap = cv2.VideoCapture(os.environ["TV_TESTER_CAMERA"], cv2.CAP_FFMPEG)
+# tive que tentar varias vezes, funcionou na rede frensch_3
+# tive que habilitar o rtsp no app da yoosee e a senha também
 # o usuário é sempre admin
 while True:
     ret, image = cap.read()
