@@ -28,13 +28,16 @@ export TV_TESTER_IR_REMOTE=192.168.0.173
 ## Usage
 ### capture
 This mode will start learning how the app should behave. It should be excuted in a stable version.
+The commands will be sent to the the tv and the camera will captured and save the images only.
 Run the script ```capture.sh```
 
 ### validate
 This mode will calculate the range of the capture error. It should be excuted in a stable version.
+The commands will be sent to the the tv and the camera will captured the same images and compared the differences and estimate the capturing error of the same images.
 Run the script ```validate.sh```
 
 
 ### run
 This mode will be used to run the tests in the version you want to be tested.
+The commands will be sent to the the tv and the camera will captured and compared with the previous captured images for the assertion of the tests.
 Run the script ```run.sh```
