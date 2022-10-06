@@ -26,7 +26,6 @@ def getFieldRemoteControl(field):
         # Read file first
         with open('remote_data.json') as json_file:
             data = json.load(json_file)
-            print(data)
             return data[field]
     except IOError:
         return ""
