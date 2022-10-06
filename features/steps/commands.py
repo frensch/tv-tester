@@ -17,6 +17,7 @@ if os.environ["TV_TESTER_CAMERA"].isnumeric():
     cam = cv2.VideoCapture(int(os.environ["TV_TESTER_CAMERA"]))
 else:
     cam = cv2.VideoCapture(os.environ["TV_TESTER_CAMERA"], cv2.CAP_FFMPEG)
+time.sleep(5) # wait for the camera to normalize the image
 
 device = broadlink.hello(os.environ['TV_TESTER_IR_REMOTE'])
 device.auth()
@@ -26,7 +27,6 @@ def getFieldRemoteControl(field):
         # Read file first
         with open('remote_data.json') as json_file:
             data = json.load(json_file)
-            print(data)
             return data[field]
     except IOError:
         return ""
