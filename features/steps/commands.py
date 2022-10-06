@@ -48,7 +48,7 @@ def step_impl(context, testPrefix):
     print("PREFIXO: " + testPrefix)
     context.testPrefix = testPrefix
 
-@when('run command "{cmd}" for "{times:d}" times and wait {secs:g} second(s)')
+@when('run command "{cmd}" for {times:d} times and wait {secs:g} second(s)')
 def cmd_times(context, cmd, times, secs):
     for t in range(0, times):
         print('Rodando comando: ' + cmd)
