@@ -1,10 +1,11 @@
 import broadlink
 import json
+import os
 #devices = broadlink.discover()
 
 #print('devices ' + str(devices))
 #device = broadlink.hello("10.0.0.140")
-device = broadlink.hello("192.168.0.173")
+device = broadlink.hello(os.environ['TV_TESTER_IR_REMOTE'])
 device.auth()
 
 model = input('digite o modelo de tv ')
